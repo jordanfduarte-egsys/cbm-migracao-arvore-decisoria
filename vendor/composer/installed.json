@@ -1,0 +1,62 @@
+{
+    "packages": [
+        {
+            "name": "ark4ne/xl-reader",
+            "version": "v1.0.1",
+            "version_normalized": "1.0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Ark4ne/xl-reader.git",
+                "reference": "994f227640b846dea84e527fa6ece73dc1ae98e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Ark4ne/xl-reader/zipball/994f227640b846dea84e527fa6ece73dc1ae98e7",
+                "reference": "994f227640b846dea84e527fa6ece73dc1ae98e7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-xmlreader": "*",
+                "ext-zip": "*",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.0 | ^7.0 | ^8.0 | ^9.0",
+                "satooshi/php-coveralls": "~1.0"
+            },
+            "time": "2020-12-10T00:46:59+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Ark4ne\\XlReader\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ark4ne (Guillaume Allegret)",
+                    "email": "gui.allegret@gmail.com"
+                }
+            ],
+            "description": "High performance Excel Reader (CSV, TSV, XLSX)",
+            "keywords": [
+                "csv",
+                "low-memory",
+                "performance",
+                "reader",
+                "xlsx"
+            ],
+            "support": {
+                "issues": "https://github.com/Ark4ne/xl-reader/issues",
+                "source": "https://github.com/Ark4ne/xl-reader/tree/v1.0.1"
+            },
+            "install-path": "../ark4ne/xl-reader"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

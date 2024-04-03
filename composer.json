@@ -1,0 +1,8 @@
+{
+    "autoload": {
+        "psr-4": {}
+    },
+    "require": {
+        "ark4ne/xl-reader": "^1.0"
+    }
+}
