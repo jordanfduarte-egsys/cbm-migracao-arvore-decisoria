@@ -72,7 +72,7 @@ function echoAlternativas($alternativas, $row, $lastInsert, $a, &$sqlAlternativa
                 ) AND arv_perg_alt.descricao = '{$alt['alernativa']}' AND arv_perg_alt.excluido = 0";
             }
             
-            $is_enc_atendimento = ($alt['enc_despacho'] == "S" || $alt['enc_despacho'] == "s") ? 1 : 0;
+            $is_enc_atendimento = ($alt['enc_despacho'] == "S" || $alt['enc_despacho'] == "s" || trim(strtoupper($alt['enc_despacho'])) == "SIM") ? 1 : 0;
             $stringPriximoPasso = str_replace("'", "´", $stringPriximoPasso);
             $is_gerar_ocorrencia = $alt['classificacao'] == 'Ocorrência' ? 1 : 0;
             $mascara = 'NULL';
@@ -678,7 +678,7 @@ function getSql($a, $natureza, $formato) {
                     break;
                 }
 
-                if (is_numeric($row[0]) || preg_match("/OPS/", $row[0])) {
+                if (is_numeric($row[0]) || preg_match("/OPS/", strtoupper($row[0]))) {
                     echoCardNatureza($orientacoes, $row, $lastInsertCard, $a, $sqlsOrientacoesNaturezaAlternativa, $sqlUpdateAlternativaCardNatureza, $natureza);
                     $orientacoes = [];
 

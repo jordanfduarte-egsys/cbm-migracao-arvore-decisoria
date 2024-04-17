@@ -106,24 +106,24 @@ function marcaComoExcluidoBanco($arquivo, $conn)
 
 // Valida as GUS
 $json = json_decode(file_get_contents("./querys/00 - query - EXECUTAR_ANTES.sql"));
+if (false) {
+    foreach ($json as $line) {
+        $lines = explode("|", $line);
+        $verifica = $lines[0];
+        $inseri = $lines[1];
+        
+        $qr = pg_query($conn, str_replace(";", "", $verifica));
+        $au = pg_fetch_array($qr, null, PGSQL_ASSOC);
 
-foreach ($json as $line) {
-    $lines = explode("|", $line);
-    $verifica = $lines[0];
-    $inseri = $lines[1];
-    
-    $qr = pg_query($conn, str_replace(";", "", $verifica));
-    $au = pg_fetch_array($qr, null, PGSQL_ASSOC);
-
-    if (empty($au['id'])) {
-        pg_query($conn, $inseri);
+        if (empty($au['id'])) {
+            pg_query($conn, $inseri);
+        }
     }
 }
 
 // Update de dados do banco
 $path = "./querys";
 $diretorio = dir($path);
-
 $arquivosLeitura = [];
 while ($arquivoCheck = $diretorio->read()){
     $arquivoCheckAux = $arquivoCheck;
@@ -206,11 +206,17 @@ foreach ($arquivosLeitura as $arquivo) {
 // Pos inserções
 $json = json_decode(file_get_contents("./querys/10000 - query - EXECUTAR_DEPOIS-TODAS-NATUREZAS.sql"));
 
+$total = 0;
 foreach ($json as $line) {
     $line = trim(str_replace([";", "-- padrão"], "", $line));
-    pg_query($conn, $line);
+    
+    if (!pg_query($conn, $line)) {
+        echo $line; exit;
+    }
+   // echo $line; exit;
+   $total++;
 }
-
+echo "TOTal " . $total;
 
 // Parte dos inserts finais
 echo "FIM";
