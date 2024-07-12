@@ -184,7 +184,8 @@ function echoAlternativas($alternativas, $row, $lastInsert, $a, &$sqlAlternativa
                     preg_match("/DEA/", $aSplitOrientacao) ||
                     preg_match("/HEMORRAGIA E CHOQUE/", $aSplitOrientacao) ||
                     preg_match("/HEMORRAGIA CHOQUE/", $aSplitOrientacao) ||
-                    preg_match("/AUXÍLIO NO PARTO \/ NASCIMENTO/", $aSplitOrientacao) 
+                    preg_match("/AUXÍLIO NO PARTO \/ NASCIMENTO/", $aSplitOrientacao) ||
+                    preg_match("/AUXILIO NO PARTO \/ NASCIMENTO/", $aSplitOrientacao) 
                     // in_array($aSplitOrientacao, [
                     //     'OVACE',
                     //     'RCP',
@@ -200,7 +201,7 @@ function echoAlternativas($alternativas, $row, $lastInsert, $a, &$sqlAlternativa
 
                     $subqueryFiltroArvCardPerg = "SELECT arv_card_perg.id FROM arv_card_perg 
                         INNER JOIN arv_card ON arv_card_perg.id_arv_card = arv_card.id
-                        WHERE UPPER(arv_card.descricao) = UPPER('{$aSplitOrientacao}') and arv_card_perg.is_pergunta_raiz = 1 and arv_card_perg.excluido = 0 limit 1";
+                        WHERE TRIM(UPPER(func_remove_acentos(arv_card.descricao))) = UPPER(func_remove_acentos('{$aSplitOrientacao}')) and arv_card_perg.is_pergunta_raiz = 1 and arv_card_perg.excluido = 0 limit 1";
 
                     if (count($numeroAlt) == 2 && intval($numeroAlt[1]) > 0) {
                         $fraseArvore = trim($numeroAlt[0]);
@@ -208,7 +209,7 @@ function echoAlternativas($alternativas, $row, $lastInsert, $a, &$sqlAlternativa
 
                         $subqueryFiltroArvCardPerg = "SELECT arv_card_perg.id FROM arv_card_perg 
                             INNER JOIN arv_card ON arv_card_perg.id_arv_card = arv_card.id
-                            WHERE UPPER(arv_card.descricao) = UPPER('{$fraseArvore}') and arv_card_perg.excluido = 0 limit 1 offset {$offset}";
+                            WHERE TRIM(UPPER(func_remove_acentos(arv_card.descricao))) = UPPER(func_remove_acentos('{$fraseArvore}')) and arv_card_perg.excluido = 0 limit 1 offset {$offset}";
                     }
 
                     $aSplitOrientacao = $fraseArvore;
@@ -425,7 +426,7 @@ function echoAlternativas($alternativas, $row, $lastInsert, $a, &$sqlAlternativa
                         (
                             SELECT arv_card_perg.id FROM arv_card_perg 
                             INNER JOIN arv_card ON arv_card_perg.id_arv_card = arv_card.id
-                            WHERE UPPER(arv_card.descricao) = UPPER('{$orientacaoNome}') and arv_card_perg.is_pergunta_raiz = 1 and arv_card_perg.excluido = 0 limit 1
+                            WHERE UPPER(func_remove_acentos(arv_card.descricao)) = UPPER(func_remove_acentos('{$orientacaoNome}')) and arv_card_perg.is_pergunta_raiz = 1 and arv_card_perg.excluido = 0 limit 1
                         ),
                         1
                     );";
@@ -450,9 +451,9 @@ function echoAlternativas($alternativas, $row, $lastInsert, $a, &$sqlAlternativa
                     $alt['alernativa'] = str_replace("'", "´", $alt['alernativa']);
                     if (empty($f)) continue;
                     if ($formato == 'string') {
-                        $sqlAgenciaEnvolvidaCadastroGuanicoes[$f] = "SELECT tipo_guarnicao.id FROM tipo_guarnicao WHERE UPPER(REPLACE(REPLACE(tipo_guarnicao.descricao, 'é', 'e'), 'É', 'E')) = UPPER('{$f}') AND (tipo_guarnicao.excluido = 0) LIMIT 1\n\nINSERT INTO tipo_guarnicao (descricao, id_agencia) VALUES('{$f}', 3);";
+                        $sqlAgenciaEnvolvidaCadastroGuanicoes[$f] = "SELECT tipo_guarnicao.id FROM tipo_guarnicao WHERE UPPER(func_remove_acentos(TRIM(tipo_guarnicao.descricao))) = UPPER(func_remove_acentos(TRIM('{$f}'))) AND (tipo_guarnicao.excluido = 0) LIMIT 1\n\nINSERT INTO tipo_guarnicao (descricao, id_agencia) VALUES(TRIM('{$f}'), 3);";
                     } else {
-                        $sqlAgenciaEnvolvidaCadastroGuanicoes[$f] = "SELECT tipo_guarnicao.id FROM tipo_guarnicao WHERE UPPER(REPLACE(REPLACE(tipo_guarnicao.descricao, 'é', 'e'), 'É', 'E')) = UPPER('{$f}') AND (tipo_guarnicao.excluido = 0) LIMIT 1|INSERT INTO tipo_guarnicao (descricao, id_agencia) VALUES('{$f}', 3)";
+                        $sqlAgenciaEnvolvidaCadastroGuanicoes[$f] = "SELECT tipo_guarnicao.id FROM tipo_guarnicao WHERE UPPER(func_remove_acentos(TRIM(tipo_guarnicao.descricao))) = UPPER(func_remove_acentos(TRIM('{$f}'))) AND (tipo_guarnicao.excluido = 0) LIMIT 1|INSERT INTO tipo_guarnicao (descricao, id_agencia) VALUES(TRIM('{$f}'), 3)";
                     }
                     
                     $sqlAgenciaEnvolvida[] = "
@@ -461,7 +462,7 @@ function echoAlternativas($alternativas, $row, $lastInsert, $a, &$sqlAlternativa
                         id_perg_alt,
                         excluido
                         ) VALUES (
-                            (SELECT tipo_guarnicao.id FROM tipo_guarnicao WHERE UPPER(tipo_guarnicao.descricao) = UPPER('{$f}') LIMIT 1),
+                            (SELECT tipo_guarnicao.id FROM tipo_guarnicao WHERE UPPER(func_remove_acentos(TRIM(tipo_guarnicao.descricao))) = UPPER(func_remove_acentos(TRIM('{$f}'))) LIMIT 1),
                             (SELECT arv_perg_alt.id FROM arv_perg_alt WHERE arv_perg_alt.descricao = '{$alt['alernativa']}' AND arv_perg_alt.excluido = 0 AND arv_perg_alt.id_arv_perg = (
                                 SELECT arv_perg.id FROM arv_perg 
                                 INNER JOIN classificacao_atendimento ON arv_perg.id_classificacao_atendimento = classificacao_atendimento.id 
@@ -486,9 +487,9 @@ function echoAlternativas($alternativas, $row, $lastInsert, $a, &$sqlAlternativa
                     $alt['alernativa'] = str_replace("'", "´", $alt['alernativa']);
                     if (empty($f)) continue;
                     if ($formato == 'string') {
-                        $sqlAgenciaEnvolvidaCadastroGuanicoes[$f] = "SELECT cbm_tipo_apoio_externo.id FROM cbm_tipo_apoio_externo WHERE UPPER(REPLACE(REPLACE(cbm_tipo_apoio_externo.descricao, 'é', 'e'), 'É', 'E')) = UPPER('{$f}') AND cbm_tipo_apoio_externo.excluido = 0 LIMIT 1\n\nINSERT INTO cbm_tipo_apoio_externo (descricao, envia_para_mobile) VALUES('{$f}', 1);";
+                        $sqlAgenciaEnvolvidaCadastroGuanicoes[$f] = "SELECT cbm_tipo_apoio_externo.id FROM cbm_tipo_apoio_externo WHERE UPPER(func_remove_acentos(TRIM(cbm_tipo_apoio_externo.descricao))) = UPPER(func_remove_acentos(TRIM('{$f}'))) AND cbm_tipo_apoio_externo.excluido = 0 LIMIT 1\n\nINSERT INTO cbm_tipo_apoio_externo (descricao, envia_para_mobile) VALUES(TRIM('{$f})', 1);";
                     } else {
-                        $sqlAgenciaEnvolvidaCadastroGuanicoes[$f] = "SELECT cbm_tipo_apoio_externo.id FROM cbm_tipo_apoio_externo WHERE UPPER(REPLACE(REPLACE(cbm_tipo_apoio_externo.descricao, 'é', 'e'), 'É', 'E')) = UPPER('{$f}') AND cbm_tipo_apoio_externo.excluido = 0 LIMIT 1|INSERT INTO cbm_tipo_apoio_externo (descricao, envia_para_mobile) VALUES('{$f}', 1)";
+                        $sqlAgenciaEnvolvidaCadastroGuanicoes[$f] = "SELECT cbm_tipo_apoio_externo.id FROM cbm_tipo_apoio_externo WHERE UPPER(func_remove_acentos(TRIM(cbm_tipo_apoio_externo.descricao))) = UPPER(func_remove_acentos(TRIM('{$f}'))) AND cbm_tipo_apoio_externo.excluido = 0 LIMIT 1|INSERT INTO cbm_tipo_apoio_externo (descricao, envia_para_mobile) VALUES(TRIM('{$f}'), 1)";
                     }
                     
                     $sqlAgenciaEnvolvida[] = "
@@ -497,7 +498,7 @@ function echoAlternativas($alternativas, $row, $lastInsert, $a, &$sqlAlternativa
                         id_perg_alt,
                         excluido
                         ) VALUES (
-                            (SELECT cbm_tipo_apoio_externo.id FROM cbm_tipo_apoio_externo WHERE UPPER(cbm_tipo_apoio_externo.descricao) = UPPER('{$f}') LIMIT 1),
+                            (SELECT cbm_tipo_apoio_externo.id FROM cbm_tipo_apoio_externo WHERE UPPER(func_remove_acentos(TRIM(cbm_tipo_apoio_externo.descricao))) = UPPER(func_remove_acentos(TRIM('{$f}'))) LIMIT 1),
                             (SELECT arv_perg_alt.id FROM arv_perg_alt WHERE arv_perg_alt.descricao = '{$alt['alernativa']}' AND arv_perg_alt.excluido = 0 AND arv_perg_alt.id_arv_perg = (
                                 SELECT arv_perg.id FROM arv_perg 
                                 INNER JOIN classificacao_atendimento ON arv_perg.id_classificacao_atendimento = classificacao_atendimento.id 
@@ -554,7 +555,7 @@ function echoCardNatureza($orientacoes, $row, $lastInsertCard, $a, &$sqlsOrienta
                 $proximoPassoOrientacaoNaturezaCard = "(SELECT arv_card_perg.id 
                     FROM arv_card_perg 
                     INNER JOIN arv_card ON arv_card_perg.id_arv_card = arv_card.id
-                    WHERE UPPER(arv_card.descricao) = UPPER('{$orientacaoNome}') 
+                    WHERE UPPER(func_remove_acentos(arv_card.descricao)) = UPPER(func_remove_acentos('{$orientacaoNome}')) 
                     and arv_card_perg.is_pergunta_raiz = 1 
                     AND arv_card_perg.excluido = 0
                     limit 1)";
@@ -751,7 +752,7 @@ function getSql($a, $natureza, $formato) {
             
             foreach ($alternativas as $alternativa) {
                 if (trim($alternativa['alernativa']) == trim($row[2])) {
-                    die("EXISTE ALGUMA PERGUNTA COM O MESMO NOME, VERIFICAR");
+                    die("\nEXISTE ALGUMA PERGUNTA COM O MESMO NOME, VERIFICAR N = {$natureza}\n");
                 }
             }
 

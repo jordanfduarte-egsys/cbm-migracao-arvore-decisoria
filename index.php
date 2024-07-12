@@ -26,6 +26,7 @@ foreach ( $ri as $file ) {
 }
 // https://www.geeksforgeeks.org/methods-to-convert-xlsx-format-files-to-csv-on-linux-cli/#:~:text=Gnumeric%20Spreadsheet%20Program&text=To%20install%20Gnumeric%20in%20Linux,Gnumeric%20repository%20via%20Linux%20terminal.&text=Now%20to%20convert%20xlsx%20format,Gnumeric%20to%20convert%20the%20file.&text=To%20view%20the%20contents%20of,to%20check%20the%20csv%20file.
 // $ xlsx2csv SampleData.xlsx --all > Output.csv
+// sudo apt install xlsx2csv
 
 function printAll($all, $formato) {
     $sql = [];
@@ -60,16 +61,17 @@ try {
 
     // @TODO Colocar aqui planilhas que estao tmb com erro na lista ou remover do arquivo xls
     //include("./planilhas-validas.php");
+    // R1 , B15
     $listArquivos = [
-        'R1 - INCIDENTE EM MEIO LÍQUID',
-        'R1 - INCIDENTE EM MEIO LÍQUIDO-V2',
+        // 'INICIAL',
+        'R1 - INCIDENTE EM MEIO LÍQUIDO',
         'R2 - CHOQUE ELÉTRICO-RAIO',
         'R3 - INCONSCIENCIA-DESMAIO',
         'R4 - OVACE BEBE+ADULTO',
         'R5 - PCR',
         'C1 - AVC-DERRAME',
         'C2 - ALERGIA-REAÇÃO MEDICAMENT',
-        'C3 - CONVULSÕES – EPILEPSIA',
+        'C3 - CONVULSÕES - EPILEPSIA',
         'C4 - DIABETES',
         'C5 - DOR ABDOMINAL',
         'C6 - DOR DE CABEÇA',
@@ -132,9 +134,9 @@ try {
                 $aParams = [];
                 continue;
             }
-        //     if ($natureza == 'B8 - INCÊNDIO EM EDIFICAÇÃO') {
-        //       //  die("KDKOS");
-        //     }
+            // if ($natureza == 'B15 - INSETOS - REMOÇÃO – EXTER') {
+            //     die("KDKOS");
+            // }
             
             $initParam = true;
         }
@@ -142,7 +144,7 @@ try {
         if (preg_match("/(------).*/", $row['A']) && !empty($aParams)) {
             // echo $naturezaOld . " COMPARE \n";
             // var_dump($aParams); exit;
-            // if ($naturezaOld == 'B25 - VENDAVAL GRANIZO') {
+            // if ($naturezaOld == 'B15 - INSETOS - REMOÇÃO – EXTER') {
             //     var_dump($processados);
             //     die("KDKOS");
             // }
@@ -240,7 +242,7 @@ try {
                 $aParams[] = $aParam;
             }
 
-            //  if ($naturezaOld == "B8 - INCÊNDIO EM EDIFICAÇÃO") {
+            //  if ($naturezaOld == "B15 - INSETOS - REMOÇÃO – EXTER") {
             //      var_dump($aParams);exit;
             //  }
         }

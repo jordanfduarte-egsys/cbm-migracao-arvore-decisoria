@@ -106,7 +106,7 @@ function marcaComoExcluidoBanco($arquivo, $conn)
 
 // Valida as GUS
 $json = json_decode(file_get_contents("./querys/00 - query - EXECUTAR_ANTES.sql"));
-if (false) {
+if (true) {
     foreach ($json as $line) {
         $lines = explode("|", $line);
         $verifica = $lines[0];
@@ -125,6 +125,7 @@ if (false) {
 $path = "./querys";
 $diretorio = dir($path);
 $arquivosLeitura = [];
+$planilhas = 0;
 while ($arquivoCheck = $diretorio->read()){
     $arquivoCheckAux = $arquivoCheck;
     $arquivoCheck = trim($arquivoCheck);
@@ -142,10 +143,11 @@ while ($arquivoCheck = $diretorio->read()){
             break;
         }
     }
+    
 }
 $diretorio->close();
 
-// var_dump($arquivosLeitura); exit;
+ // var_dump($arquivosLeitura); exit;
 foreach ($arquivosLeitura as $arquivo) {
     $json = json_decode(file_get_contents("./querys/" . $arquivo['arquivo']));
     marcaComoExcluidoBanco($arquivo, $conn);
@@ -200,7 +202,7 @@ foreach ($arquivosLeitura as $arquivo) {
     }
 
     echo "INSERIDO o " . $arquivo['nome_ajustado'] . " (" . $linhasBanco . ") <br>\n";
-    die;
+    $planilhas++;
 }
 
 // Pos inserções
@@ -216,7 +218,7 @@ foreach ($json as $line) {
    // echo $line; exit;
    $total++;
 }
-echo "TOTal " . $total;
+echo "TOTAL Planilhas: " . $planilhas . " Total de redirecionamentos/chamdas extras: " . $total;
 
 // Parte dos inserts finais
 echo "FIM";
