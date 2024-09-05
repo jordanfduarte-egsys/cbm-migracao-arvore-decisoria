@@ -226,6 +226,23 @@ if (file_exists("./querys/10000 - query - EXECUTAR_DEPOIS-TODAS-NATUREZAS.sql"))
     $total++;
     }
 }
+
+// Corrige a string do ARV_PERG e troca de "25#PERGUNTA" para "PERGUNTA"
+foreach ($arquivosLeitura as $arquivo) {
+    $json = json_decode(file_get_contents("./querys/" . $arquivo['arquivo']));
+    $linhasBanco = 0;
+
+    $d = trim(explode("-", $arquivo['nome_ajustado'])[0]);
+    $q1 = "SELECT * FROM classificacao_atendimento WHERE descricao LIKE '{$d} %' ORDER BY ID DESC LIMIT 1";
+    $qr = pg_query($conn, $q1);
+    $au = pg_fetch_array($qr, null, PGSQL_ASSOC);
+    if (!empty($au)) {
+        $idClassificacaoAtendimento = $au['id'];
+        $q2 = "UPDATE FROM arv_perg SET descricao = select select REGEXP_REPLACE(REGEXP_REPLACE(descricao, '(\d\d)#', '', 'g'), '(\d)#', '', 'g') WHERE ID_CLASSIFICACAO_ATENDIMENTO = " . $idClassificacaoAtendimento;
+        pg_query($conn, $q2);
+    }
+}
+
 echo "TOTAL Planilhas: " . $planilhas . " Total de redirecionamentos/chamdas extras: " . $total . "\n";
 
 // Parte dos inserts finais

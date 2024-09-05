@@ -731,6 +731,8 @@ function getSql($a, $natureza, $formato) {
             echoAlternativas($alternativas, $row, $lastInsert, $a, $sqlAlternativas, $sqlAgenciaEnvolvida, $sqlUpdateOrientacaoNatureza, $natureza, $sqlProximoPassoOutraNatureza, $sqlAgenciaEnvolvidaCadastroGuanicoes, $formato);
             $alternativas = [];
             $row[1] = str_replace("'", "´", $row[1]);
+            // TODO TESTES
+            $row[1] = $row[0] . "#" . $row[1];
             if (!isset($repetidas[$row[1]])) {
                 $repetidas[$row[1]] = 0;
             }
