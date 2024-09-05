@@ -733,14 +733,14 @@ function getSql($a, $natureza, $formato) {
             $row[1] = str_replace("'", "´", $row[1]);
             // TODO TESTES
             $row[1] = $row[0] . "#" . $row[1];
-            if (!isset($repetidas[$row[1]])) {
-                $repetidas[$row[1]] = 0;
-            }
-            $repetidas[$row[1]]++;
+            // if (!isset($repetidas[$row[1]])) {
+            //     $repetidas[$row[1]] = 0;
+            // }
+            //$repetidas[$row[1]]++;
             $sqlsPerguntas[] = "INSERT INTO arv_perg (id_classificacao_atendimento, descricao, excluido, is_pergunta_raiz) VALUES ((SELECT classificacao_atendimento.id FROM classificacao_atendimento WHERE lower(classificacao_atendimento.descricao) = lower('{$natureza}')  AND classificacao_atendimento.excluido = 0 LIMIT 1), '$row[1]', 0, {$perguntaRaiz});";
-            if ($repetidas[$row[1]] > 1) {
-                exit("\n\r ATENÇÃO: Existe na {$natureza} repetidas perguntas com a descrição: {$row[1]}\n\r");
-            }
+            // if ($repetidas[$row[1]] > 1) {
+            //     exit("\n\r ATENÇÃO: Existe na {$natureza} repetidas perguntas com a descrição: {$row[1]}\n\r");
+            // }
             $perguntaRaiz = 0;
             $lastInsert = $row[1];
             $row[2] = str_replace("'", "´", $row[2]);
@@ -760,11 +760,11 @@ function getSql($a, $natureza, $formato) {
         } else {
             $row[2] = str_replace("'", "´", @$row[2]);
             
-            foreach ($alternativas as $alternativa) {
-                if (trim($alternativa['alernativa']) == trim($row[2])) {
-                    die("\nEXISTE ALGUMA PERGUNTA COM O MESMO NOME, VERIFICAR N = {$natureza}\n");
-                }
-            }
+            // foreach ($alternativas as $alternativa) {
+            //     if (trim($alternativa['alernativa']) == trim($row[2])) {
+            //         die("\nEXISTE ALGUMA PERGUNTA COM O MESMO NOME, VERIFICAR N = {$natureza}\n");
+            //     }
+            // }
 
             $alternativas[] = [
                 'pergunta_principal'        => "",
