@@ -3,17 +3,17 @@ require "./vendor/autoload.php";
 require "./function.php";
 set_time_limit(-1);
 
-echo "<pre>";
+echo "\n\n\r";
 
 $nomeArquivo = "arvoreFINAL.csv";
 $file = "./{$nomeArquivo}";
 
-echo "Iniciando processo<br><br>\n";
+echo "Iniciando processo\n\n\n";
 
-echo "Removendo arquivo: {$nomeArquivo}<br><br>\n";
+echo "Removendo arquivo: {$nomeArquivo}\n\n\n";
 unlink("{$nomeArquivo}");
 
-echo "Criando novo arquivo: {$nomeArquivo}<br><br>\n";
+echo "Criando novo arquivo: {$nomeArquivo}\n\n\n";
 exec("xlsx2csv arvore.xlsx --all > {$nomeArquivo}", $a, $b);
 
 
@@ -55,7 +55,7 @@ try {
     $natureza = "";
     $naturezaOld = "";
     $initParam = false;
-    echo "Iniciando processo dos scripts<br><br>\r";
+    echo "Iniciando processo dos scripts\n\n\r";
     $processados = 0;
     $countUpdatesNaturezas = 0;
 
@@ -63,62 +63,70 @@ try {
     //include("./planilhas-validas.php");
     // R1 , B15
     $listArquivos = [
+        'LESAO CORPORAL - VIOLENCIA DOME',
+        'FURTO',
+        'TESTE'
         // 'INICIAL',
-        'R1 - INCIDENTE EM MEIO LÍQUIDO',
-        'R2 - CHOQUE ELÉTRICO-RAIO',
-        'R3 - INCONSCIENCIA-DESMAIO',
-        'R4 - OVACE BEBE+ADULTO',
-        'R5 - PCR',
-        'C1 - AVC-DERRAME',
-        'C2 - ALERGIA-REAÇÃO MEDICAMENT',
-        'C3 - CONVULSÕES - EPILEPSIA',
-        'C4 - DIABETES',
-        'C5 - DOR ABDOMINAL',
-        'C6 - DOR DE CABEÇA',
-        'C7 - DOR NAS COSTAS',
-        'C8 - DOR NO PEITO - PROBLEMAS C',
-        'C9 - ENVENENAMENTO - OVERDOSE',
-        'C10 - GRAVIDEZ - PARTO - ABORTO',
-        'C11 - PROBLEMA DESC - HOMEM CAÍ',
-        'C12 - PROBLEMAS RESPIRATÓRIOS',
-        'C13 - PSIQUIÁTRICO',
-        'C14 - SUICÍDIO - TENTATIVA DE S',
-        'T1 - ACIDENTE C MAQUINA-INDUST',
-        'T2 NOVO - ACIDENTE DE TRANSIT',
-        'T3 - AGRESSÃO - VIOL. SEXUAL',
-        'T4 - FAB E FAF',
-        'T5 - MORDIDA DE ANIMAL',
-        'T6 - ANIMAIS PEÇONHENTOS',
-        'T7 - QUEDAS-TRAUMA DE COLUNA',
-        'T8 - QUEIMADURAS',
-        'T9 - TRAUMAS ESPECÍFICOS',
-        'B1 - ANIMAL - SALVAM. - CAPTU',
-        'B2 - ARVORE - QUEDA DE - CORT',
-        'B3 - DESLIZAMENTO - SOTERRAMENT',
-        'B4 - ELETRICO - RISCO',
-        'B5 - EXPLOSÃO',
-        'B6 - FUMAÇA EXTERIOR - VERIFI',
-        'B7 - INCÊNDIO - ALARME',
-        'B8 - INCÊNDIO EM EDIFICAÇÃO',
-        'B9 - INCÊNDIO EXTERIOR',
-        'B10 - INCÊNDIO FLORESTAL',
-        'B11 - INCÊNDIO VEICULAR',
-        'B12 - INCIDENTE COM AERONAVE',
-        'B13 - INCIDENTE COM EMBARCAÇÃO',
-        'B14 - INCIDENTE COM TREM - METR',
-        'B15 - INSETOS - REMOÇÃO – EXTER',
-        'Nova B16 - PESSOA PERDIDA',
-        'B17 - PRODUTOS PERIGOSOS',
-        'B18 - SALV ALTURA',
-        'B19 - SALV AQUATICO - ENCHENTE',
-        'B20 - SALV CONFINADO - COLAPSAD',
-        'B21 - SALV ELEVADOR',
-        'B22 - VAZAMENTO GAS - GLP-GN',
-        'B23 - SERVIÇO APOIO ORGAO',
-        'B24 - SERVIÇO ASSIST CIDADAO',
-        'B25 - VENDAVAL GRANIZO',
-        'COMPLEMENTAR - VEÍCULO'
+        // 'R1 - INCIDENTE EM MEIO LÍQUIDO',
+        // 'R2 - CHOQUE ELÉTRICO-RAIO',
+        // 'R3 - INCONSCIENCIA-DESMAIO',
+        // 'R4 - OVACE BEBE+ADULTO',
+        // 'R5 - PCR',
+        // 'C1 - AVC-DERRAME',
+        // 'C2 - ALERGIA-REAÇÃO MEDICAMENT',
+        // 'C3 - CONVULSÕES - EPILEPSIA',
+        // 'C4 - DIABETES',
+        // 'C5 - DOR ABDOMINAL',
+        // 'C6 - DOR DE CABEÇA',
+        // 'C7 - DOR NAS COSTAS',
+        // 'C8 - DOR NO PEITO - PROBLEMAS C',
+        // 'C9 - ENVENENAMENTO - OVERDOSE',
+        // 'C10 - GRAVIDEZ - PARTO - ABORTO',
+        // 'C11 - PROBLEMA DESC - HOMEM CAÍ',
+        // 'C12 - PROBLEMAS RESPIRATÓRIOS',
+        // 'C13 - PSIQUIÁTRICO',
+        // 'C14 - SUICÍDIO - TENTATIVA DE S',
+        // 'T1 - ACIDENTE C MAQUINA-INDUST',
+        // 'T2 NOVO - ACIDENTE DE TRANSIT',
+        // 'T3 - AGRESSÃO - VIOL. SEXUAL',
+        // 'T4 - FAB E FAF',
+        // 'T5 - MORDIDA DE ANIMAL',
+        // 'T6 - ANIMAIS PEÇONHENTOS',
+        // 'T7 - QUEDAS-TRAUMA DE COLUNA',
+        // 'T8 - QUEIMADURAS',
+        // 'T9 - TRAUMAS ESPECÍFICOS',
+        // 'B1 - ANIMAL - SALVAM. - CAPTU',
+        // 'B2 - ARVORE - QUEDA DE - CORT',
+        // 'B3 - DESLIZAMENTO - SOTERRAMENT',
+        // 'B4 - ELETRICO - RISCO',
+        // 'B5 - EXPLOSÃO',
+        // 'B6 - FUMAÇA EXTERIOR - VERIFI',
+        // 'B7 - INCÊNDIO - ALARME',
+        // 'B8 - INCÊNDIO EM EDIFICAÇÃO',
+        // 'B9 - INCÊNDIO EXTERIOR',
+        // 'B10 - INCÊNDIO FLORESTAL',
+        // 'B11 - INCÊNDIO VEICULAR',
+        // 'B12 - INCIDENTE COM AERONAVE',
+        // 'B13 - INCIDENTE COM EMBARCAÇÃO',
+        // 'B14 - INCIDENTE COM TREM - METR',
+        // 'B15 - INSETOS - REMOÇÃO – EXTER',
+        // 'Nova B16 - PESSOA PERDIDA',
+        // 'B17 - PRODUTOS PERIGOSOS',
+        // 'B18 - SALV ALTURA',
+        // 'B19 - SALV AQUATICO - ENCHENTE',
+        // 'B20 - SALV CONFINADO - COLAPSAD',
+        // 'B21 - SALV ELEVADOR',
+        // 'B22 - VAZAMENTO GAS - GLP-GN',
+        // 'B23 - SERVIÇO APOIO ORGAO',
+        // 'B24 - SERVIÇO ASSIST CIDADAO',
+        // 'B25 - VENDAVAL GRANIZO',
+        // 'COMPLEMENTAR - VEÍCULO'
     ];
+    echo "\n\rSera processado os itens: ";
+    foreach ($listArquivos as $arquivo) {
+        echo " - " . $arquivo . "\n\r";
+    }
+    echo "\n\n\r";
     foreach ($reader->read() as $row) {
         if (preg_match("/------/", $row['A'])) {
             $natureza = preg_replace("/-------- \d -/", "", $row['A']);
@@ -212,7 +220,7 @@ try {
                 $processadosItem = $processados + 1;
                 error_log($sqlFinal, 3, "./querys/{$processadosItem} - query - {$naturezaOld}.sql");
                 if (!isset($_GET['OUTRO'])) {
-                    echo "<div style='color:green;'>Finalizado processo na natureza: <b>" . $naturezaOld . "</b></div> <br><br>\n";
+                    echo "<div style='color:green;'>Finalizado processo na natureza: <b>" . $naturezaOld . "</b></div> \n\n\n";
                 }
             } else {
                 $sqlFinal = [];
@@ -263,9 +271,9 @@ try {
         error_log(printAll($sqlProximoPassoOutraNatureza, $formato), 3, "./querys/10000 - query - EXECUTAR_DEPOIS-TODAS-NATUREZAS.sql");
     }
     
-    echo "Processados: " . $processados . "<br><br>\n";
-    echo "Processados naturezas updates: " . $countUpdatesNaturezas . "<br><br>\n";
-    echo "FIM<br><br>\n";
+    echo "Processados: " . $processados . "\n\n\n";
+    echo "Processados naturezas updates: " . $countUpdatesNaturezas . "\n\n\n";
+    echo "FIM\n\n\n";
 } catch (Exception $e) {
     var_dump($e);
 }

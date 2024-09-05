@@ -1,5 +1,5 @@
 <?php
-echo "\n\n<pre>";
+echo "\n\n";
 include "./planilhas-validas.php";
 set_time_limit(0);
 $host = 'servidor_banco';
@@ -8,6 +8,12 @@ $user = 'harpya_app';
 $pass = 'Sbpbn938N9kCNFDU4FskAWMP';
 
 $conn = pg_connect("host=$host port=5432 dbname=$dbname user=$user password=$pass");
+
+echo "\n\rSera processado os itens: ";
+foreach ($listArquivos as $arquivo) {
+    echo " - " . $arquivo . "\n\r";
+}
+echo "\n\n\r";
 
 function marcaComoExcluidoBanco($arquivo, $conn)
 {
@@ -201,24 +207,26 @@ foreach ($arquivosLeitura as $arquivo) {
         }
     }
 
-    echo "INSERIDO o " . $arquivo['nome_ajustado'] . " (" . $linhasBanco . ") <br>\n";
+    echo " - INSERIDO o " . $arquivo['nome_ajustado'] . " (" . $linhasBanco . ")\n";
     $planilhas++;
 }
 
 // Pos inserções
-$json = json_decode(file_get_contents("./querys/10000 - query - EXECUTAR_DEPOIS-TODAS-NATUREZAS.sql"));
-
 $total = 0;
-foreach ($json as $line) {
-    $line = trim(str_replace([";", "-- padrão"], "", $line));
-    
-    if (!pg_query($conn, $line)) {
-        echo $line; exit;
+if (file_exists("./querys/10000 - query - EXECUTAR_DEPOIS-TODAS-NATUREZAS.sql")) {
+    $json = json_decode(file_get_contents("./querys/10000 - query - EXECUTAR_DEPOIS-TODAS-NATUREZAS.sql"));
+
+    foreach ($json as $line) {
+        $line = trim(str_replace([";", "-- padrão"], "", $line));
+        
+        if (!pg_query($conn, $line)) {
+            echo $line; exit;
+        }
+    // echo $line; exit;
+    $total++;
     }
-   // echo $line; exit;
-   $total++;
 }
-echo "TOTAL Planilhas: " . $planilhas . " Total de redirecionamentos/chamdas extras: " . $total;
+echo "TOTAL Planilhas: " . $planilhas . " Total de redirecionamentos/chamdas extras: " . $total . "\n";
 
 // Parte dos inserts finais
 echo "FIM";
