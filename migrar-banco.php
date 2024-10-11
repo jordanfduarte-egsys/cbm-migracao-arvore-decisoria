@@ -243,6 +243,32 @@ foreach ($arquivosLeitura as $arquivo) {
     }
 }
 
+// Ajusta a tabela de arv_card_perg_alt, mantendo sempre 1 alternativa para cada orientação, a orientação.
+$sql = "select id_arv_card_perg, total from (
+	select *, 
+	(
+		select count(1) from  arv_card_perg_alt oo where oo.descricao = 'Orientado' 
+		and oo.excluido = 0 and oo.id_arv_card_perg = oo1.id_arv_card_perg
+	) as total
+    from arv_card_perg_alt oo1 where descricao = 'Orientado' and excluido = 0
+    and oo1.id_arv_mascara = 7 order by oo1.data_criacao asc
+) as r where r.total > 1";
+$qr = pg_query($conn, $sql);
+$arr1 = pg_fetch_all($qr);
+foreach ($arr1 as $row) {
+   $idArvCardPerg = $row['id_arv_card_perg'];
+   if ($idArvCardPerg) {
+        $sql1 = "select id from arv_card_perg_alt where id_arv_card_perg = $idArvCardPerg";
+        $qr1 = pg_query($conn, $sql1);
+        $arr = pg_fetch_all($qr1);
+        $arr = array_pop($arr);
+        foreach($arr as $i => $row1) {
+            $id = $row1['id'];
+            pg_query($conn, "UPDATE arv_card_perg_alt set excluido = 1, data_exclusao = NOW() where id = $id");
+        }
+   }
+}
+
 echo "TOTAL Planilhas: " . $planilhas . " Total de redirecionamentos/chamdas extras: " . $total . "\n";
 
 // Parte dos inserts finais
