@@ -44,6 +44,7 @@ function echoAlternativas($alternativas, $row, $lastInsert, $a, &$sqlAlternativa
                     if (preg_match("/ORIENTAÇÃO/", $row2[1])) break;
 
                     if ($alt['proximo_passo'] == $row2[0]) {
+                        $row2[1] = $row2[0] . "#" . $row2[1];
                         $stringPriximoPasso = $row2[1];
                         break;
                     }
@@ -74,7 +75,7 @@ function echoAlternativas($alternativas, $row, $lastInsert, $a, &$sqlAlternativa
             
             $is_enc_atendimento = ($alt['enc_despacho'] == "S" || $alt['enc_despacho'] == "s" || trim(strtoupper($alt['enc_despacho'])) == "SIM") ? 1 : 0;
             $stringPriximoPasso = str_replace("'", "´", $stringPriximoPasso);
-            $is_gerar_ocorrencia = $alt['classificacao'] == 'Ocorrência' ? 1 : 0;
+            $is_gerar_ocorrencia = trim($alt['classificacao']) == 'Ocorrência' ? 1 : 0;
             $mascara = 'NULL';
             if (strtoupper($alt['alernativa']) == 'DESCREVER' || preg_match("/DESCREVER/", strtoupper($alt['alernativa']))  || preg_match("/DESCREVA/", strtoupper($alt['alernativa']))) {
                 $mascara = "(SELECT arv_mascara.id FROM arv_mascara WHERE chave = 'ALPHA' AND arv_mascara.excluido = 0 LIMIT 1)";
