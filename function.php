@@ -670,7 +670,7 @@ function getSql($a, $natureza, $formato) {
         }
 
         if (preg_match("/ORIENTAÇÃO/", @$row[1]) || $isOrientacoes) {
-            if (preg_match("/ORIENTAÇÃO/", $row[1])) {
+            if (isset($row[1]) && preg_match("/ORIENTAÇÃO/", $row[1])) {
                 echoAlternativas($alternativas, $row, $lastInsert, $a, $sqlAlternativas, $sqlAgenciaEnvolvida, $sqlUpdateOrientacaoNatureza, $natureza, $sqlProximoPassoOutraNatureza, $sqlAgenciaEnvolvidaCadastroGuanicoes, $formato);
             }
             // Orientações aqui

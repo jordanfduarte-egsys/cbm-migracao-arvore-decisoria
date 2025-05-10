@@ -238,7 +238,8 @@ foreach ($arquivosLeitura as $arquivo) {
     $au = pg_fetch_array($qr, null, PGSQL_ASSOC);
     if (!empty($au)) {
         $idClassificacaoAtendimento = $au['id'];
-        $q2 = "UPDATE FROM arv_perg SET descricao = select select REGEXP_REPLACE(REGEXP_REPLACE(descricao, '(\d\d)#', '', 'g'), '(\d)#', '', 'g') WHERE ID_CLASSIFICACAO_ATENDIMENTO = " . $idClassificacaoAtendimento;
+        $q2 = "UPDATE arv_perg SET descricao = (select REGEXP_REPLACE(REGEXP_REPLACE(descricao, '(\d\d)#', '', 'g'), '(\d)#', '', 'g')) WHERE ID_CLASSIFICACAO_ATENDIMENTO = " . $idClassificacaoAtendimento;
+
         pg_query($conn, $q2);
     }
 }
@@ -263,8 +264,10 @@ foreach ($arr1 as $row) {
         $arr = pg_fetch_all($qr1);
         $arr = array_pop($arr);
         foreach($arr as $i => $row1) {
-            $id = $row1['id'];
-            pg_query($conn, "UPDATE arv_card_perg_alt set excluido = 1, data_exclusao = NOW() where id = $id");
+            if (!empty($row1['id'])) {
+                $id = $row1['id'];
+                pg_query($conn, "UPDATE arv_card_perg_alt set excluido = 1, data_exclusao = NOW() where id = $id");
+            }
         }
    }
 }
